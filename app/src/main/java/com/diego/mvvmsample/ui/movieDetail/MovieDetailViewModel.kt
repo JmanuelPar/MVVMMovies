@@ -45,17 +45,25 @@ class MovieDetailViewModel(
         showProgress()
         viewModelScope.launch {
             when (val response = repository.getMovieById(movieId = movieId)) {
-                is ApiResult.Success -> showSuccess(response.data)
+                is ApiResult.Success -> {
+                    repository.insertMovieDetail(response.data)
+                    showSuccess(response.data)
+                }
                 is ApiResult.Error -> {
-                    val uiText = when (val exception = response.exception) {
-                        is IOException -> UIText.NoConnect
-                        is HttpException -> exception.localizedMessage?.let {
-                            UIText.MessageException(it)
-                        } ?: UIText.UnknownError
-                        else -> UIText.UnknownError
-                    }
+                    val movieDetailDb = repository.getMovieDetailById(movieDetailId = movieId)
+                    if (movieDetailDb != null) {
+                        showSuccess(movieDetailDb)
+                    } else {
+                        val uiText = when (val exception = response.exception) {
+                            is IOException -> UIText.NoConnect
+                            is HttpException -> exception.localizedMessage?.let {
+                                UIText.MessageException(it)
+                            } ?: UIText.UnknownError
+                            else -> UIText.UnknownError
+                        }
 
-                    showError(uiText)
+                        showError(uiText)
+                    }
                 }
             }
         }

@@ -1,6 +1,21 @@
 package com.diego.mvvmsample.utils
 
+import androidx.paging.PagingData
+import androidx.paging.map
 import com.diego.mvvmsample.data.model.*
+import com.diego.mvvmsample.db.MovieDatabase
+
+// Convert NetworkMovies to List MovieDatabase
+fun NetworkMovies.asDatabaseModel() =
+    results?.map { result ->
+        MovieDatabase(
+            idMovie = result.id!!,
+            title = result.title ?: "",
+            posterPath = result.posterPath ?: "",
+            releaseDate = result.releaseDate ?: "",
+            rating = result.voteAverage ?: -1.0
+        )
+    } ?: emptyList()
 
 // Convert NetworkMovieDetail to MovieDetail
 fun NetworkMovieDetail.asDomainModel(): MovieDetail {
@@ -9,6 +24,7 @@ fun NetworkMovieDetail.asDomainModel(): MovieDetail {
     } ?: ""
 
     return MovieDetail(
+        id = this.id!!,
         title = this.title ?: "",
         releaseDate = this.releaseDate ?: "",
         genres = genres,
@@ -19,18 +35,15 @@ fun NetworkMovieDetail.asDomainModel(): MovieDetail {
     )
 }
 
-// Convert NetworkMovies to List Movie
-fun NetworkMovies.asDomainModel() =
-    results?.map { result ->
-        processingItems(result)
-    } ?: emptyList()
-
-private fun processingItems(result: Result) =
-    Movie(
-        idMovie = result.id!!,
-        title = result.title ?: "",
-        posterPath = result.posterPath ?: "",
-        releaseDate = result.releaseDate ?: "",
-        rating = result.voteAverage ?: -1.0
-    )
+fun PagingData<MovieDatabase>.transformAsMovie(): PagingData<Movie> {
+    return this.map { movieDatabase ->
+        Movie(
+            idMovie = movieDatabase.idMovie,
+            title = movieDatabase.title,
+            posterPath = movieDatabase.posterPath,
+            releaseDate = movieDatabase.releaseDate,
+            rating = movieDatabase.rating
+        )
+    }
+}
 

@@ -99,12 +99,22 @@ class MoviesFragment : Fragment(R.layout.fragment_movies), MovieListener {
     private fun showUI() {
         viewLifecycleOwner.lifecycleScope.launch {
             movieAdapter.loadStateFlow.collect { loadState ->
-                val isListEmpty =
-                    loadState.refresh is LoadState.NotLoading && movieAdapter.itemCount == 0
+                // Show a retry header if there was an error refreshing, and items were previously
+                // cached OR default to the default prepend state
+                headerAdapter.loadState = loadState.mediator
+                    ?.refresh
+                    ?.takeIf { it is LoadState.Error && movieAdapter.itemCount > 0 }
+                    ?: loadState.prepend
 
-                showProgressBar(loadState.source.refresh is LoadState.Loading)
+                val isListEmpty =
+                    loadState.source.refresh is LoadState.NotLoading && movieAdapter.itemCount == 0
+
+                showProgressBar(loadState.mediator?.refresh is LoadState.Loading)
+                showRecyclerView(
+                    loadState.source.refresh is LoadState.NotLoading
+                            || loadState.mediator?.refresh is LoadState.NotLoading
+                )
                 showLayoutNoResult(isListEmpty)
-                showRecyclerView(!isListEmpty)
 
                 val errorState = loadState.refresh as? LoadState.Error
                 errorState?.let { loadStateError ->
@@ -117,7 +127,9 @@ class MoviesFragment : Fragment(R.layout.fragment_movies), MovieListener {
                         else -> getString(R.string.error_result_message_unknown_retry)
                     }
 
-                    showError(errorMessage)
+                    if (movieAdapter.itemCount == 0) {
+                        showError(errorMessage)
+                    }
                 }
             }
         }
@@ -136,6 +148,7 @@ class MoviesFragment : Fragment(R.layout.fragment_movies), MovieListener {
     }
 
     private fun showError(errorMessage: String) {
+        showLayoutNoResult(false)
         showErrorMessage(errorMessage)
         showLayoutError(true)
     }
