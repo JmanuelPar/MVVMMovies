@@ -2,11 +2,9 @@ package com.diego.mvvmsample.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.diego.mvvmsample.R
 import com.diego.mvvmsample.data.model.Movie
 import com.diego.mvvmsample.databinding.ItemMovieCardBinding
 
@@ -33,9 +31,9 @@ class MovieAdapter(private val clickListener: MovieListener) :
 
         companion object {
             fun from(parent: ViewGroup): MovieViewHolder {
-                val binding = DataBindingUtil.inflate<ItemMovieCardBinding>(
-                    LayoutInflater.from(parent.context),
-                    R.layout.item_movie_card,
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemMovieCardBinding.inflate(
+                    layoutInflater,
                     parent,
                     false
                 )

@@ -103,8 +103,8 @@ class MoviesFragment : Fragment(R.layout.fragment_movies), MovieListener {
                     loadState.refresh is LoadState.NotLoading && movieAdapter.itemCount == 0
 
                 showProgressBar(loadState.source.refresh is LoadState.Loading)
-                showLayoutNoResult(isListEmpty)
                 showRecyclerView(!isListEmpty)
+                showLayoutNoResult(isListEmpty)
 
                 val errorState = loadState.refresh as? LoadState.Error
                 errorState?.let { loadStateError ->
