@@ -8,7 +8,7 @@ import timber.log.Timber
 class MyApplication : Application() {
 
     val moviesRepository: MoviesRepository
-        get() = ServiceLocator.provideMoviesRepository()
+        get() = ServiceLocator.provideMoviesRepository(this)
 
     override fun onCreate() {
         super.onCreate()

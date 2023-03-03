@@ -22,6 +22,13 @@ android {
         properties.load(project.rootProject.file("local.properties").newDataInputStream())
 
         buildConfigField "String","API_KEY","\"${properties.getProperty("API_KEY")}\""
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation":
+                                      "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     buildTypes {
@@ -91,14 +98,19 @@ dependencies {
 
     // Paging3
     implementation "androidx.paging:paging-runtime-ktx:3.1.1"
+    implementation("androidx.room:room-paging:2.5.0")
 
     // Time
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
     // Coil
-    //implementation "io.coil-kt:coil:1.1.1"
     implementation "io.coil-kt:coil:2.2.2"
 
     // Splashscreen
     implementation "androidx.core:core-splashscreen:1.0.0"
+
+    // Room
+    implementation "androidx.room:room-runtime:2.5.0"
+    implementation "androidx.room:room-ktx:2.5.0"
+    kapt "androidx.room:room-compiler:2.5.0"
 }
