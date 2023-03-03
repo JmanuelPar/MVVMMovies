@@ -33,9 +33,9 @@ class MovieAdapter(private val clickListener: MovieListener) :
 
         companion object {
             fun from(parent: ViewGroup): MovieViewHolder {
-                val binding = DataBindingUtil.inflate<ItemMovieCardBinding>(
-                    LayoutInflater.from(parent.context),
-                    R.layout.item_movie_card,
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemMovieCardBinding.inflate(
+                    layoutInflater,
                     parent,
                     false
                 )
