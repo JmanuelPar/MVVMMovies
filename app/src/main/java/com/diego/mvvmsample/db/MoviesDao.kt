@@ -17,8 +17,4 @@ interface MoviesDao {
 
     @Query("DELETE FROM movies")
     suspend fun clearMovies()
-
-    /* @VisibleForTesting
-     @Query("SELECT * FROM movies")
-     fun getListMovies(): List<MovieDatabase>*/
 }

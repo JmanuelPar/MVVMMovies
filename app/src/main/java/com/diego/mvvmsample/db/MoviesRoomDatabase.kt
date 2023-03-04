@@ -7,7 +7,7 @@ import com.diego.mvvmsample.data.model.MovieDetail
 @Database(
     entities = [MovieDatabase::class, RemoteKeys::class, MovieDetail::class],
     version = 1,
-    exportSchema = true
+    exportSchema = false
 )
 abstract class MoviesRoomDatabase : RoomDatabase() {
 

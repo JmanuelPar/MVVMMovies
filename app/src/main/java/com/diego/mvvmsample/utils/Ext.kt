@@ -2,7 +2,10 @@ package com.diego.mvvmsample.utils
 
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.diego.mvvmsample.data.model.*
+import com.diego.mvvmsample.data.model.Movie
+import com.diego.mvvmsample.data.model.MovieDetail
+import com.diego.mvvmsample.data.model.NetworkMovieDetail
+import com.diego.mvvmsample.data.model.NetworkMovies
 import com.diego.mvvmsample.db.MovieDatabase
 
 // Convert NetworkMovies to List MovieDatabase

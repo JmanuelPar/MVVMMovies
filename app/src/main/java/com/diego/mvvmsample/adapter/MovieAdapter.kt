@@ -12,8 +12,7 @@ class MovieAdapter(private val clickListener: MovieListener) :
     PagingDataAdapter<Movie, MovieAdapter.MovieViewHolder>(MOVIE_DIFF_CALLBACK) {
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        val item = getItem(position)
-        item?.let { holder.bind(item, clickListener) }
+        getItem(position)?.let { item -> holder.bind(item, clickListener) }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -23,10 +22,12 @@ class MovieAdapter(private val clickListener: MovieListener) :
     class MovieViewHolder private constructor(private val binding: ItemMovieCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Movie, listener: MovieListener) {
-            binding.movie = item
-            binding.listener = listener
-            binding.executePendingBindings()
+        fun bind(item: Movie, mListener: MovieListener) {
+            binding.apply {
+                movie = item
+                listener = mListener
+                executePendingBindings()
+            }
         }
 
         companion object {
